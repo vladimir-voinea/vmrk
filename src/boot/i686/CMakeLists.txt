@@ -1,1 +1,0 @@
-add_library(i686-boot STATIC boot.s)

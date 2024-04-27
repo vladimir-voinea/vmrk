@@ -1,52 +1,63 @@
-/* The bootloader will look at this image and start execution at the symbol
-   designated as the entry point. */
 ENTRY(_start)
- 
-/* Tell where the various sections of the object files will be put in the final
-   kernel image. */
+
 SECTIONS
 {
-	/* It used to be universally recommended to use 1M as a start offset,
-	   as it was effectively guaranteed to be available under BIOS systems.
-	   However, UEFI has made things more complicated, and experimental data
-	   strongly suggests that 2M is a safer place to load. In 2016, a new
-	   feature was introduced to the multiboot2 spec to inform bootloaders
-	   that a kernel can be loaded anywhere within a range of addresses and
-	   will be able to relocate itself to run from such a loader-selected
-	   address, in order to give the loader freedom in selecting a span of
-	   memory which is verified to be available by the firmware, in order to
-	   work around this issue. This does not use that feature, so 2M was
-	   chosen as a safer option than the traditional 1M. */
-	. = 2M;
- 
-	/* First put the multiboot header, as it is required to be put very early
-	   in the image or the bootloader won't recognize the file format.
-	   Next we'll put the .text section. */
-	.text BLOCK(4K) : ALIGN(4K)
-	{
-		*(.multiboot)
-		*(.text)
-	}
- 
-	/* Read-only data. */
-	.rodata BLOCK(4K) : ALIGN(4K)
-	{
-		*(.rodata)
-	}
- 
-	/* Read-write data (initialized) */
-	.data BLOCK(4K) : ALIGN(4K)
-	{
-		*(.data)
-	}
- 
-	/* Read-write data (uninitialized) and stack */
-	.bss BLOCK(4K) : ALIGN(4K)
-	{
-		*(COMMON)
-		*(.bss)
-	}
- 
-	/* The compiler may produce other sections, by default it will put them in
-	   a segment with the same name. Simply add stuff here as needed. */
+  . = 4M;
+  _kernel_physical_start = .;
+
+  .boottext :
+    {
+      *(.multiboot)
+      *(.text)
+    }
+  .bootrodata :
+    {
+      *(.rodata)
+    }
+  .bootdata :
+    {
+      *(.data)
+    }
+  .bootbss :
+    {
+      *(.bss)
+      *(COMMON)
+    }
+
+  . = ALIGN(0x1000);
+  _boot_end = .;
+
+  . += 0xFFFFFFFF80000000;
+  _kernel_virtual_start = .;
+  .text : AT(_boot_end)
+  {
+    *(.multiboot)
+    *(.text)
+  }
+
+  . = ALIGN(0x1000);
+
+  .rodata : AT ( (LOADADDR (.text) + SIZEOF (.text) + 0xFFF) & 0xFFFFFFFFFFFFF000 )
+  {
+    *(.rodata)
+  }
+
+  . = ALIGN(0x1000);
+
+  .data : AT ( (LOADADDR (.rodata) + SIZEOF (.rodata) + 0xFFF) & 0xFFFFFFFFFFFFF000 )
+  {
+    *(.data)
+  }
+
+  . = ALIGN(0x1000);
+
+  .bss : AT ( (LOADADDR (.data) + SIZEOF (.data) + 0xFFF) & 0xFFFFFFFFFFFFF000 )
+  {
+    *(COMMON)
+    *(.bss)
+  }
+
+  _kernel_virtual_end = .;
+
+  _kernel_physical_end = (LOADADDR (.bss) + SIZEOF (.bss) + 0xFFF) & 0xFFFFFFFFFFFFF000;
 }
