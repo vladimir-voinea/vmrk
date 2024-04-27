@@ -80,7 +80,7 @@ void terminal::putentryat(char c, uint8_t color, size_t x, size_t y)
 	terminal_buffer[index] = vga_entry(c, color);
 }
 
-void terminal::scroll(int line) {
+void terminal::scroll(size_t line) {
     unsigned char* video_memory = reinterpret_cast<unsigned char*>(VGA_MEMORY);
 
     if (line <= 0 || line >= VGA_HEIGHT) {
@@ -109,7 +109,7 @@ void terminal::scroll(int line) {
 void terminal::delete_last_line() {
    volatile unsigned char* ptr;  // Use 'volatile' for hardware mapped memory to prevent optimizations that may skip actual memory write
 
-    for (int x = 0; x < VGA_WIDTH * 2; x++) {
+    for (auto x = 0u; x < VGA_WIDTH * 2; x++) {
         ptr = reinterpret_cast<unsigned char*>(VGA_MEMORY) + (VGA_WIDTH * 2) * (VGA_HEIGHT - 1) + x;
         *ptr = 0;
     }
@@ -123,7 +123,6 @@ void terminal::putchar(char c)
         return;
     }
 
-	int line;
 	unsigned char uc = c;
  
 	putentryat(uc, terminal_color, terminal_column, terminal_row);
@@ -131,7 +130,7 @@ void terminal::putchar(char c)
 		terminal_column = 0;
 		if (++terminal_row == VGA_HEIGHT)
 		{
-			for(line = 1; line <= VGA_HEIGHT - 1; line++)
+			for(auto line = 1u; line <= VGA_HEIGHT - 1; line++)
 			{
 				scroll(line);
 			}

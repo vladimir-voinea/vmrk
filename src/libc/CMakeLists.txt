@@ -2,6 +2,7 @@ add_library(libc STATIC
                     src/string.c
                     src/compiler.cxx
                     src/stdio.cxx
+                    src/stdlib.cxx
             )
 
 target_include_directories(libc PUBLIC include)

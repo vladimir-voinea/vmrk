@@ -1,4 +1,5 @@
 #include <compiler.hpp>
+#include <stdlib.h>
 
 namespace __cxxabiv1 
 { 
@@ -16,4 +17,10 @@ namespace __cxxabiv1
 	{
  
 	}
+}
+
+__attribute__((noreturn))
+extern "C" void __stack_chk_fail(void)
+{
+	abort();
 }

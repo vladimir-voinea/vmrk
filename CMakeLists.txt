@@ -13,8 +13,8 @@ set(CMAKE_ASM_FLAGS "-target ${TARGET_TRIPLET}")
 set(CMAKE_C_COMPILER clang)
 set(CMAKE_CXX_COMPILER clang++)
 
-set(CMAKE_CXX_FLAGS "-target ${TARGET_TRIPLET} -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti")
-set(CMAKE_C_FLAGS "-target ${TARGET_TRIPLET} -ffreestanding -O2 -Wall -Wextra")
+set(CMAKE_CXX_FLAGS "-target ${TARGET_TRIPLET} -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti -fstack-protector-all")
+set(CMAKE_C_FLAGS "-target ${TARGET_TRIPLET} -ffreestanding -O2 -Wall -Wextra -fstack-protector-all")
 
 set(CMAKE_CXX_STANDARD_LIBRARIES "")
 set(CMAKE_C_STANDARD_LIBRARIES "")

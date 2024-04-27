@@ -11,7 +11,7 @@ public:
 
     void write(const char* data, size_t size);
     void write(const char* data);
-    void scroll(int line);
+    void scroll(size_t line);
 
 private:
     terminal();
