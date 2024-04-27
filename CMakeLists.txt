@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(vmrk LANGUAGES CXX)
+project(vmrk LANGUAGES CXX C)
 
 set(TARGET "i686")
 set(TARGET_TRIPLET "${TARGET}-elf-none")
