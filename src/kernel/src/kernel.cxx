@@ -17,8 +17,6 @@ void foo(const char* str)
  
 extern "C" void kernel_main(void) 
 {
-	printf("Hello world\n");
-
-	const auto long_mode_available = is_long_mode_available();
-	printf("Long mode is %s\n", long_mode_available ?  "available" : "not available");
+	printf("vmr kernel started\n");
+	printf("Long mode is %s\n", is_long_mode_available() ?  "available" : "not available");
 }
