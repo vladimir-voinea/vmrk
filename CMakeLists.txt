@@ -19,12 +19,12 @@ set(CMAKE_CXX_STANDARD_LIBRARIES "")
 set(CMAKE_C_STANDARD_LIBRARIES "")
 
 add_executable(kernel
-    boot.s
-    kernel.cxx
+    src/boot/i686/boot.s
+    src/kernel.cxx
 )
 
 set_target_properties(kernel PROPERTIES
-    LINK_FLAGS "-target ${TARGET} -Wl -T ${CMAKE_SOURCE_DIR}/linker.ld -nostdlib -ffreestanding"
+    LINK_FLAGS "-target ${TARGET} -Wl -T ${CMAKE_SOURCE_DIR}/src/linker/linker.ld -nostdlib -ffreestanding"
 )
 
 # Create output directory structure
@@ -37,7 +37,7 @@ add_custom_command(TARGET kernel POST_BUILD
             "${CMAKE_BINARY_DIR}/kernel"
             "${CMAKE_BINARY_DIR}/isodir/boot/kernel"
     COMMAND ${CMAKE_COMMAND} -E copy
-            "${CMAKE_SOURCE_DIR}/grub.cfg"
+            "${CMAKE_SOURCE_DIR}/src/grub/grub.cfg"
             "${CMAKE_BINARY_DIR}/isodir/boot/grub/grub.cfg")
 
 # Create the ISO image
