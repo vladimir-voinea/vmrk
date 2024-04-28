@@ -37,21 +37,19 @@ SECTIONS
 
   . = ALIGN(0x1000);
 
-  .rodata : AT ( (LOADADDR (.text) + SIZEOF (.text) + 0xFFF) & 0xFFFFFFFFFFFFF000 )
+  .rodata : AT(ALIGN(LOADADDR(.text) + SIZEOF(.text) + 0x1000, 0x1000))
   {
-    *(.rodata)
+      *(.rodata)
+  }
+
+  .data : AT(ALIGN(LOADADDR(.rodata) + SIZEOF(.rodata) + 0x1000, 0x1000))
+  {
+      *(.data)
   }
 
   . = ALIGN(0x1000);
 
-  .data : AT ( (LOADADDR (.rodata) + SIZEOF (.rodata) + 0xFFF) & 0xFFFFFFFFFFFFF000 )
-  {
-    *(.data)
-  }
-
-  . = ALIGN(0x1000);
-
-  .bss : AT ( (LOADADDR (.data) + SIZEOF (.data) + 0xFFF) & 0xFFFFFFFFFFFFF000 )
+  .bss : AT(ALIGN(LOADADDR(.data) + SIZEOF(.data) + 0x1000, 0x1000))
   {
     *(COMMON)
     *(.bss)
@@ -59,5 +57,5 @@ SECTIONS
 
   _kernel_virtual_end = .;
 
-  _kernel_physical_end = (LOADADDR (.bss) + SIZEOF (.bss) + 0xFFF) & 0xFFFFFFFFFFFFF000;
+  _kernel_physical_end = (LOADADDR (.bss) + SIZEOF (.bss) + 0x1000) & 0xFFFFFFFFFFFFF000;
 }
