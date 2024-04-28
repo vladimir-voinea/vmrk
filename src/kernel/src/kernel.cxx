@@ -9,7 +9,7 @@ void foo(const char* str)
 	memcpy(buffer, str, strlen(str));
 }
  
-extern "C" void Kernel_Main(void) 
+extern "C" void kernel_main(void) 
 {
 	printf("vmr kernel started\n");
 	printf("Long mode is %s\n", is_long_mode_available() ?  "available" : "not available");

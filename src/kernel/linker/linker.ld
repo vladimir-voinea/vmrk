@@ -7,21 +7,21 @@ SECTIONS
 
   .boottext :
     {
-      *(.multiboot)
-      *(.text)
+      ../arch/x86_64/libboot.a (.multiboot)
+      ../arch/x86_64/libboot.a (.text)
     }
   .bootrodata :
     {
-      *(.rodata)
+      ../arch/x86_64/libboot.a (.rodata)
     }
   .bootdata :
     {
-      *(.data)
+      ../arch/x86_64/libboot.a (.data)
     }
   .bootbss :
     {
-      *(.bss)
-      *(COMMON)
+      ../arch/x86_64/libboot.a (.bss)
+      ../arch/x86_64/libboot.a (COMMON)
     }
 
   . = ALIGN(0x1000);
